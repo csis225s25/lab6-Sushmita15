@@ -10,11 +10,13 @@ import javax.swing.event.*;
  * @author Ira Goldstein
  * @version Spring 2025
  */
-public class MouseDemo  extends MouseAdapter implements Runnable {
+public class MousePressedCounter extends MouseAdapter implements Runnable, ActionListener {
 
 	private String toDisplay;
-    private JLabel count = new JLabel("Mouse Press Counts: " + counter);
     private int counter = 0;
+    private JLabel count = new JLabel("Mouse Press Counts: " + counter);
+    private JButton reset = new JButton("Reset");
+    
 
 	/**
 	 * The run method to set up the graphical user interface
@@ -27,6 +29,7 @@ public class MouseDemo  extends MouseAdapter implements Runnable {
 		JFrame frame = new JFrame("Mouse Pressed");
 		frame.setPreferredSize(new Dimension(500, 500));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel centered = new JPanel();
 
 		// construct an anonymous class that extends JPanel,
 		// for which we override the paintComponent method
@@ -48,11 +51,15 @@ public class MouseDemo  extends MouseAdapter implements Runnable {
 				g.drawString(toDisplay, xStart, yStart);
 			}*/
 		};
+
+        
         panel.add(count);
+        panel.add(reset);
 		frame.add(panel);
+        panel.add(centered);
 		panel.addMouseListener(this);
 		panel.addMouseMotionListener(this);
-		panel.addMouseWheelListener(this);
+		reset.addActionListener(this);
 
 		// display the window we've created
 		frame.pack();
@@ -71,37 +78,22 @@ public class MouseDemo  extends MouseAdapter implements Runnable {
         
 	}
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		System.out.println("mouseReleased: " + e);
-	}
+    @Override
+    public void actionPerformed(ActionEvent e){
 
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		System.out.println("mouseEntered: " + e);
-	}
+        if(e.getActionCommand().equals("Reset")){
+           counter = 0;
+           count.setText("Mouse Press Count: " + counter);
+        
+    
+        }
+        
 
-	@Override
-	public void mouseExited(MouseEvent e) {
-		System.out.println("mouseExited: " + e);
-	}
+    }
 
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		System.out.println("mouseDragged: " + e);
-	}
-
-	//@Override
-	//public void mouseMoved(MouseEvent e) {
-	//	System.out.println("mouseMoved: " + e);
-	//}
-
-	//@Override
-//	public void mouseWheelMoved(MouseWheelEvent e) {
-//		System.out.println("mouseWheelMoved: " + e);
-	//}
+	
 
 	public static void main(String args[]) {
-		javax.swing.SwingUtilities.invokeLater(new MouseDemo());
+		javax.swing.SwingUtilities.invokeLater(new MousePressedCounter());
 	}
 }

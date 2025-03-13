@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 
 /**
  * Lab 5 demo of mouse events.
@@ -29,47 +28,35 @@ public class MousePressedCounter extends MouseAdapter implements Runnable, Actio
 		JFrame frame = new JFrame("Mouse Pressed");
 		frame.setPreferredSize(new Dimension(500, 500));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel centered = new JPanel();
 
-		// construct an anonymous class that extends JPanel,
-		// for which we override the paintComponent method
-		JPanel panel = new JPanel() {
-			//@Override
-		/*	public void paintComponent(Graphics g) {
+        // create a main panel for all our content
+        JPanel content = new JPanel();
+		content.setLayout(new BorderLayout());
 
-				super.paintComponent(g);
-
-				FontMetrics fm = g.getFontMetrics();
-
-				
-				int stringWidth = fm.stringWidth(toDisplay);
-				int stringAscent = fm.getAscent();
-
-				int xStart = getWidth() / 2 - stringWidth / 2;
-				int yStart = getHeight() / 2 + stringAscent / 2;
-
-				g.drawString(toDisplay, xStart, yStart);
-			}*/
-		};
-
-        
+        // add counter to the center
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel.add(count);
-        panel.add(reset);
-		frame.add(panel);
-        panel.add(centered);
-		panel.addMouseListener(this);
-		panel.addMouseMotionListener(this);
+        content.add(panel, BorderLayout.CENTER);
+
+		// move reset button to the bottom center
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		bottomPanel.add(reset);
+		content.add(bottomPanel, BorderLayout.SOUTH);
+ 
+        // add to frame
+		frame.add(content);
+
+        // add listeners
+		content.addMouseListener(this);
+		content.addMouseMotionListener(this);
 		reset.addActionListener(this);
 
 		// display the window we've created
 		frame.pack();
 		frame.setVisible(true);
 	}
-
-	//@Override
-	//public void mouseClicked(MouseEvent e) {
-	//	System.out.println("mouseClicked: " + e);
-	//}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -84,14 +71,8 @@ public class MousePressedCounter extends MouseAdapter implements Runnable, Actio
         if(e.getActionCommand().equals("Reset")){
            counter = 0;
            count.setText("Mouse Press Count: " + counter);
-        
-    
         }
-        
-
     }
-
-	
 
 	public static void main(String args[]) {
 		javax.swing.SwingUtilities.invokeLater(new MousePressedCounter());
